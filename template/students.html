@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+{% extends 'layout.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{% block content %}
+ <h1>學生列表</h1>
+    <div>
+        <a href="/add_student/" class="badge rounded-pill bg-primary" style="font-size: 18px">添加</a>
+        <a id="addModal"  class="badge rounded-pill bg-success" style="font-size: 18px">對話框添加</a>
+    </div>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>學生名稱</th>
+                <th>班級</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in student_list %}
+                <tr>
+                    <td>{{row.sid}}</td>
+                    <td>{{row.sname}}</td>
+				    <td clsid='{{row.class_id}}'>{{row.cname}}</td>
+                    <td>
+                        <a href="/edit_student/?nid={{row.sid}}"><i class="fas fa-pencil-alt"></i>編輯</a>
+                        |
+                        <a class="EditModal">編輯ajax</a>
+                        |
+                        <a href="/del_student/?nid={{row.sid}}"><i class="fas fa-trash-alt"></i>刪除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>>
+ {% block css %}
+    <style>
+        .hide{
+            display: none;
+        }
+        .shadow{
+            /*相對於窗口來說*/
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            background-color: darkgrey;
+            opacity: 0.4;
+            z-index: 999;
+        }
+        .add-modal{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 400px;
+            height: 300px;
+            background-color: white;
+            z-index: 1000;
+            margin-left: -200px;
+            margin-top: -200px;
+        }
+        .edit-modal{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            width: 400px;
+            height: 300px;
+            background-color: white;
+            z-index: 1000;
+            margin-left: -200px;
+            margin-top: -200px;
+        }
+    </style>
+ {% endblock %}
+
+
+
+
+    <div id="shadow" class="shadow hide"></div>
+    <div id="add-Modal" class="add-modal hide">
+        <p>
+            姓名: <input id="addName" type="text" name="name" placeholder="姓名"/>
+        </p>
+        <p>
+            班級:
+            <select id="addClassId" name="classId">
+                {% for row in class_list%}
+                    <option value="{{row.cid}}">{{row.cname}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input id="btnAdd" type="button" value="添加"/>
+        <span id="addError" style="color: red;"></span>
+
+    </div>
+    <div id="edit-Modal" class="edit-modal hide">
+        <h3>編輯學生信息</h3>
+        <p>
+            <input id="editId" value="{{row.sid}}" type="text" style="display: none"/>
+        </p>
+        <p>
+            姓名: <input id="editName" type="text" name="name" placeholder="姓名"/>
+        </p>
+        <p>
+            班級:
+            <select id="editClassId" name="classId">
+                {% for row in class_list%}
+                    <option value="{{row.cid}}">{{row.cname}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input id="btnEdit" type="button" value="修改"/>
+        <span id="editError" style="color: red;"></span>
+
+    </div>
+
+ {% endblock %}
+<script src="/static/jQuery v1.12.4.js"></script>
+{% block js %}
+
+    $(function() {
+        $('#addModal').click(function () {
+            $('#shadow, #add-Modal, #edit-Modal').removeClass('hide');
+            // return false; 阻止默認事件發生
+        })
+        
+        $('#btnAdd').click(function () {
+            $.ajax({
+                url:'/modal_add_student/',
+                type:'POST',
+                data:{'name':$('#addName').val(), 'class_id':$('#addClassId').val()},
+                success:function (arg) {
+
+                    arg = JSON.parse(arg);
+                    if(arg.status){
+                        location.reload();
+                    }else {
+                        $('#addError').text(arg.message);
+                    }
+
+                }
+            })
+        })
+
+        $('.EditModal').click(function () {
+            $('#shadow, #edit-Modal').removeClass('hide');
+            var tds = $(this).parent().prevAll();
+            var studentId = $(tds[2]).text();
+            var studentName = $(tds[1]).text();
+            var classId = $(tds[0]).attr('clsid');
+            $('#editId').val(studentId);
+            $('#editName').val(studentName);
+            $('#editClassId').val(classId);
+        })
+
+        $('#btnEdit').click(function () {
+            $.ajax({
+                url:'/modal_edit_student/',
+                type:'POST',
+                data:{'id':$('#editId').val(), 'name': $('#editName').val(), 'class_id':$('#editClassId').val()},
+                // dataType: 'JSON',
+                success:function (arg) {
+
+                    arg = JSON.parse(arg);
+                    if(arg.status){
+                        location.reload();
+                    }else {
+                        $('#editError').text(arg.message);
+                    }
+
+                }
+            })
+        })
+    })
+    {% endblock %}
+</html>

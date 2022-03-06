@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .hide{
+            display: none;
+         }
+        .shadow{
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.4;
+            z-index: 999;
+         }
+        .modal{
+            z-index: 1000;
+            position: fixed;
+            left: 40%;
+            top: 40%;
+            height: 200px;
+            width: 350px;
+            background-color: white;
+         }
+    </style>
+</head>
+<body>
+    <h1>班級列表</h1>
+    <div>
+        <a href="/add_class/">添加</a>
+        <a onclick="showModal();">對話框添加</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>班級名稱</th>
+
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in class_list %}
+                <tr>
+                    <td>{{row.cid}}</td>
+                    <td>{{row.cname}}</td>
+                    <td>
+                        <a href="/edit_class/?nid={{row.cid}}">編輯</a>
+                        |
+                        <a onclick="EditModal(this);">編輯ajax</a>
+                        |
+                        <a href="/del_class/?nid={{row.cid}}">刪除</a>
+                        |
+                        <a onclick="deleteModal(this);">刪除ajax</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>>
+    <div id = 'shadow' class="shadow hide"></div>
+    <div id = 'modal' class="modal hide">
+
+        <p>
+            <input id="title" type="text" name="title"/>
+        </p>
+        <input type="button"  value ='提交' onclick="AjaxSend();" /><span id="errormsg"></span>
+        <input type="button"  value ='取消' onclick="cancleModal();" />
+
+    </div>
+    <div id = 'Editmodal' class="modal hide">
+        <h3>編輯框</h3>
+        <p>
+            <input id="editTitle" type="text" name="title"/>
+            <input id="editId" type="text" name="id" style="display: none"/>
+        </p>
+        <input type="button"  value ='提交' onclick="editAjaxSend();" /><span id="edit_errormsg"></span>
+        <input type="button"  value ='取消' onclick="cancleModal();" />
+
+    </div>
+    <script src="/static/jQuery v1.12.4.js"></script>
+    <script>
+        function showModal(){
+            document.getElementById('shadow').classList.remove('hide')
+            document.getElementById('modal').classList.remove('hide')
+        }
+        function EditModal(ths){
+            document.getElementById('shadow').classList.remove('hide')
+            document.getElementById('Editmodal').classList.remove('hide')
+            /*
+            1.獲取當前點標籤
+            2.當前標籤父標籤,在找其上方標籤
+            3.獲取當前班級名稱,賦值到當前對話框
+            */
+            var row = $(ths).parent().prevAll();
+            var content = $(row[0]).text();
+            $('#editTitle').val(content);
+
+            var contentId = $(row[1]).text();
+            $('#editId').val(contentId);
+        }
+        function deleteModal(ths){
+
+            var row = $(ths).parent().prevAll();
+            var nid = $(row[1]).text();
+            console.log(nid);
+            $.ajax({
+                url:'/modal_delete_class/',
+                type: 'POST',
+                data: {'nid': nid,},
+                success: function(data)
+                {
+                    location.reload();
+                }
+             })
+        }
+        function cancleModal(){
+            document.getElementById('shadow').classList.add('hide')
+            document.getElementById('modal').classList.add('hide')
+            document.getElementById('Editmodal').classList.add('hide')
+        }
+        function editAjaxSend(){
+
+            var nid = $('#editId').val();
+            var content = $('#editTitle').val();
+            $.ajax({
+                url:'/modal_edit_class/',
+                type: 'POST',
+                data: {'nid':nid, 'content': content},
+                success: function(arg){
+                    arg = JSON.parse(arg);
+                    console.log(arg.status);
+                    if(arg.status)
+                    {
+                        location.reload();
+                    }
+                    else
+                    {
+                        alert(arg.message);
+                    }
+                }
+            })
+        }
+        function AjaxSend()
+        {
+
+            $.ajax({
+                url:'/modal_add_class/',
+                type: 'POST',
+                data: {'title': $('#title').val()},
+                success: function(data){
+                    //當服務端處裡完成後,返回數據時,該函數自動調用
+                    //data = 服務端返回的值
+
+                    if(data =='ok'){
+                        location.href='/classes/';
+                    }
+                    else{
+                        $('#errormsg').text(data);
+                    }
+                }
+            })
+        }
+
+    </script>
+</body>
+</html>

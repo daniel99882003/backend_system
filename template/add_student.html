@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>添加學生</h1>
+    <form method="POST" action="/add_student/">
+        <p>學生姓名: <input type="text" name="sname" /></p>
+        <p>
+            所屬班級
+            <select name="class_id">
+                {% for row in class_list %}
+                    <option value="{{row.cid}}">{{row.cname}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <input type="submit" value="提交" />
+    </form>
+
+</body>
+</html>

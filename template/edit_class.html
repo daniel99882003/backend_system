@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>編輯班級</h1>
+
+    <form method="POST" action="/edit_class/?nid={{result.cid}}">
+        <p>班級名稱: <input type="text" name="cname" value="{{result.cname}}" /></p>
+
+        <input type="submit" value="提交" />
+
+    </form>
+
+</body>
+</html>

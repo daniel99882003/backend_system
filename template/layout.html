@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-5.1.0-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/fontawesome-free-5.15.4-web/css/fontawesome.css">
+    <script src="https://kit.fontawesome.com/e7e1322ce6.js" crossorigin="anonymous"></script>
+    <script src="/static/jQuery v1.12.4.js"></script>
+    <style>
+        body{
+
+            width: 1300px;
+            margin: 0 auto;
+
+        }
+
+        .page_head{
+            height: 48px;
+            min-width: 1200px;
+            background-color: #86b7fe;
+            line-height: 48px;
+
+        }
+        .page_menu{
+            top: 48px;
+            position: absolute;
+            left: 310px;
+            bottom: 0px;
+            right: 310px;
+            min-width: 200px;
+            background-color: #565e64;
+            color: white;
+            font-size: 18px;
+
+        }
+        .page_content{
+            top: 48px;
+            left: 510px;
+            right: 310px;
+            bottom: 0px;
+            background-color: white;
+            min-width: 990px;
+            position: absolute;
+            overflow: scroll;
+            z-index: 99;
+        }
+        .page_head .logo{
+            color: white;
+            width: 200px;
+            text-align: center;
+            border-right: 1px solid black;
+            font-size: 18px;
+
+        }
+        .left{
+            float: left;
+        }
+        .right{
+            float: right;
+        }
+        .page_head .rmenue a{
+            display: inline-block;
+            padding: 0 15px;
+            color: white;
+        }
+        .page_head .rmenue a:hover{
+            background-color: #0d6efd;
+        }
+        .page_head .avatar{
+
+            padding: 0 20px;
+            position: relative;
+        }
+        .page_head .avatar img{
+            border-radius: 50%;
+            height: 40px;
+            width: 40px;
+        }
+        .page_head .avatar .user-info{
+            display: none;
+            background-color: white;
+            color: black;
+            border: 1px solid #dddddd;
+            position: absolute;width: 200px; top: 48px;right: 0px; z-index: 100;
+
+        }
+        .page_head .avatar:hover .user-info{
+            display: block;
+        }
+        .page_head .avatar .user-info a{
+            display: block;
+        }
+        .page_menu a{
+            display: block;
+            padding: 20px 60px;
+
+        }
+        .page_menu a:hover{
+            background-color: #0a53be;
+        }
+        {% block css %}
+        {% endblock %}
+    </style>
+</head>
+<body>
+
+    <div class="page_head">
+    <div class="logo left">帥哥後臺管理</div>
+    <div class="avatar right">
+        <img src="/static/img/1.jpg">
+        <div class="user-info">
+            <a>個人資料</a>
+            <a>註銷</a>
+        </div>
+    </div>
+    <div class="rmenue right">
+        <a><i class="far fa-comment-dots"></i>消息</a>
+        <a><i class="far fa-envelope"></i>信箱</a>
+    </div>
+</div>
+    <div class="page_menu left">
+        <a href="/classes">班級管理</a>
+        <a href="/students">學生管理</a>
+        <a href="/teachers">老師管理</a>
+    </div>
+    <div class="page_content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+<script>
+{% block js %}
+{% endblock %}
+</script>
+
+</html>
