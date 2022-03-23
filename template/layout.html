@@ -19,7 +19,7 @@
         .page_head{
             height: 48px;
             min-width: 1200px;
-            background-color: #86b7fe;
+            background-color: #0a58ca;
             line-height: 48px;
 
         }
@@ -30,7 +30,7 @@
             bottom: 0px;
             right: 310px;
             min-width: 200px;
-            background-color: #565e64;
+            background-color: #212529;
             color: white;
             font-size: 18px;
 
@@ -48,10 +48,12 @@
         }
         .page_head .logo{
             color: white;
+            font-weight:bold;
+            font-size: 28px;
             width: 200px;
             text-align: center;
-            border-right: 1px solid black;
-            font-size: 18px;
+            border-right: 1px solid white;
+
 
         }
         .left{
@@ -66,7 +68,7 @@
             color: white;
         }
         .page_head .rmenue a:hover{
-            background-color: #0d6efd;
+            background-color: #0a58ca;
         }
         .page_head .avatar{
 
@@ -75,8 +77,8 @@
         }
         .page_head .avatar img{
             border-radius: 50%;
-            height: 40px;
-            width: 40px;
+            height: 45px;
+            width: 45px;
         }
         .page_head .avatar .user-info{
             display: none;
@@ -107,9 +109,9 @@
 <body>
 
     <div class="page_head">
-    <div class="logo left">帥哥後臺管理</div>
+    <div class="logo left">晨龍 後臺管理</div>
     <div class="avatar right">
-        <img src="/static/img/1.jpg">
+        <img src="/static/img/3.jpg">
         <div class="user-info">
             <a>個人資料</a>
             <a>註銷</a>
@@ -121,9 +123,9 @@
     </div>
 </div>
     <div class="page_menu left">
-        <a href="/classes">班級管理</a>
-        <a href="/students">學生管理</a>
-        <a href="/teachers">老師管理</a>
+        <a href="/classes" style="color:white">班級管理</a>
+        <a href="/students" style="color:white">學生管理</a>
+        <a href="/teachers" style="color:white">老師管理</a>
     </div>
     <div class="page_content">
         {% block content %}
